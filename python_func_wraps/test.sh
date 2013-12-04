@@ -1,4 +1,4 @@
 #!/bin/bash
-./apply test.py
+./apply *.py
 ./test.py
-./restore test.py
+./restore *.py

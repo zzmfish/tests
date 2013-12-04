@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#encoding=utf-8
+#no-apply-func-wrap
 import sys
 from functools import wraps
 
