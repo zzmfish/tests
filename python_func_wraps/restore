@@ -1,0 +1,5 @@
+#!/bin/bash
+for fn in $*; do
+    sed -i "/@TraceCalls()/d" $fn
+    sed -i "/from TraceCalls import TraceCalls/d" $fn
+done
