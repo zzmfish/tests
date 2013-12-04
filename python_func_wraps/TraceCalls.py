@@ -4,13 +4,14 @@
 import sys
 from functools import wraps
 
+stream = open('trace.log', 'w')
+
 class TraceCalls(object):
     """ Use as a decorator on functions that should be traced. Several
         functions can be decorated - they will all be indented according
         to their call depth.
     """
-    def __init__(self, stream=sys.stdout, indent_step=2, show_ret=False):
-        self.stream = stream
+    def __init__(self, indent_step=2, show_ret=False):
         self.indent_step = indent_step
         self.show_ret = show_ret
 
@@ -29,13 +30,13 @@ class TraceCalls(object):
             func_name = fn.__name__
             file_name = fn.func_code.co_filename
             line_num = fn.func_code.co_firstlineno
-            self.stream.write('%s%s(%s) %s:%d\n' % (indent, func_name, argstr, file_name, line_num))
+            stream.write('%s%s(%s) %s:%d\n' % (indent, func_name, argstr, file_name, line_num))
 
             TraceCalls.cur_indent += self.indent_step
             ret = fn(*args, **kwargs)
             TraceCalls.cur_indent -= self.indent_step
 
             if self.show_ret:
-                self.stream.write('%s--> %s\n' % (indent, ret))
+                stream.write('%s--> %s\n' % (indent, ret))
             return ret
         return wrapper
