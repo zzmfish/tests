@@ -26,7 +26,10 @@ class TraceCalls(object):
             argstr = ', '.join(
                 [repr(a) for a in args] +
                 ["%s=%s" % (a, repr(b)) for a, b in kwargs.items()])
-            self.stream.write('%s%s(%s)\n' % (indent, fn.__name__, argstr))
+            func_name = fn.__name__
+            file_name = fn.func_code.co_filename
+            line_num = fn.func_code.co_firstlineno
+            self.stream.write('%s%s(%s) %s:%d\n' % (indent, func_name, argstr, file_name, line_num))
 
             TraceCalls.cur_indent += self.indent_step
             ret = fn(*args, **kwargs)
