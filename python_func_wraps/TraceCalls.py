@@ -24,11 +24,13 @@ class TraceCalls(object):
     def __call__(self, fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
+            func_name = fn.__name__
+            if func_name == '__repr__':
+                return #避免递归
             indent = ' ' * TraceCalls.cur_indent
             argstr =  '' #', '.join(
                 #[repr(a) for a in args] +
                 #["%s=%s" % (a, repr(b)) for a, b in kwargs.items()])
-            func_name = fn.__name__
             file_name = os.path.basename(fn.func_code.co_filename)
             line_num = fn.func_code.co_firstlineno
             stream.write('%20s:%5d: %s%s(%s)\n' % (file_name, line_num, indent, func_name, argstr))
