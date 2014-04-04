@@ -5,12 +5,6 @@
 */
 #include <sys/types.h>
 
-
-/* Print out a message, prefixed by the process ID.
-*/
-void procmsg(const char* format, ...);
-
-
 /* Run the given program in a child process with exec() and tracing
 ** enabled.
 */
@@ -19,14 +13,7 @@ void run_target(const char* programname);
 
 /* Retrieve the child process's current instruction pointer value.
 */
-long get_child_eip(pid_t pid);
-
-
-/* Display memory contents in the inclusive range [from_addr:to_addr] from the
-** given process's address space.
-*/
-void dump_process_memory(pid_t pid, void *from_addr, void *to_addr);
-
+void* get_child_eip(pid_t pid);
 
 struct debug_breakpoint_t;
 typedef struct debug_breakpoint_t debug_breakpoint;

@@ -1,4 +1,7 @@
 
 all:
-	gcc -o debug bp_use_lib.c debuglib.c
-	gcc -o hello hello.c
+	gcc -o debugger debugger.c breakpoint.c
+	gcc -o target target.c
+
+clean:
+	rm *.o debugger target

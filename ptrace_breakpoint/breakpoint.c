@@ -17,20 +17,12 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "debuglib.h"
+#include "breakpoint.h"
 
 
 /* Print a message to stdout, prefixed by the process ID
 */
-void procmsg(const char* format, ...)
-{
-    va_list ap;
-    fprintf(stdout, "[%d] ", getpid());
-    va_start(ap, format);
-    vfprintf(stdout, format, ap);
-    va_end(ap);
-}
-
+#define procmsg(...) printf(__VA_ARGS__);
 
 /* Run a target process in tracing mode by exec()-ing the given program name.
 */
@@ -49,18 +41,18 @@ void run_target(const char* programname)
 }
 
 
-long get_child_eip(pid_t pid)
+void* get_child_eip(pid_t pid)
 {
     struct user_regs_struct regs;
     ptrace(PTRACE_GETREGS, pid, 0, &regs);
-    return regs.rip;
+    return (void*)regs.rip;
 }
 
 
 void dump_process_memory(pid_t pid, void *from_addr, void *to_addr)
 {
     void *addr;
-    procmsg("Dump of %d's memory [0x%08X : 0x%08X]\n", pid, from_addr, to_addr);
+    procmsg("Dump of %d's memory [%p : %p]\n", pid, from_addr, to_addr);
     for (addr = from_addr; addr <= to_addr; ++addr) {
         long word = ptrace(PTRACE_PEEKTEXT, pid, addr, 0);
         printf("  0x%p:  %lx\n", addr, word);

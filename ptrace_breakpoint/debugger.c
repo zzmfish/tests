@@ -17,8 +17,9 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "debuglib.h"
+#include "breakpoint.h"
 
+#define procmsg(...) printf(__VA_ARGS__);
 
 void run_debugger(pid_t child_pid)
 {
@@ -26,7 +27,7 @@ void run_debugger(pid_t child_pid)
 
     /* Wait for child to stop on its first instruction */
     wait(0);
-    procmsg("child now at EIP = 0x%08x\n", get_child_eip(child_pid));
+    procmsg("child now at EIP = %p\n", get_child_eip(child_pid));
 
     /* Create breakpoint and run to it*/
     debug_breakpoint* bp = create_breakpoint(child_pid, (void*)0x400543);
@@ -40,7 +41,7 @@ void run_debugger(pid_t child_pid)
         ** execution until it either exits or hits the
         ** breakpoint again.
         */
-        procmsg("child stopped at breakpoint. EIP = 0x%08X\n", get_child_eip(child_pid));
+        procmsg("child stopped at breakpoint. EIP = %p\n", get_child_eip(child_pid));
         procmsg("resuming\n");
         int rc = resume_from_breakpoint(child_pid, bp);
 
