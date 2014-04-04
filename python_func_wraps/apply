@@ -34,7 +34,7 @@ for filename in sys.argv[1:]:
 
         #import库
         if not imported:
-            if not statement.startswith('#'):
+            if statement and not statement.startswith('#'):
                 outbuf += indent + 'from TraceCalls import TraceCalls\n'
                 imported = True
     
